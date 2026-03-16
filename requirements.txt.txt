@@ -2,6 +2,6 @@ streamlit
 pandas
 numpy
 matplotlib
-requests
-windrose
 scipy
+windrose
+requests
