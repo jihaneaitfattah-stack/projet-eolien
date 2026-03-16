@@ -139,7 +139,7 @@ if st.sidebar.button("Lancer l'analyse"):
     # ---- Graphique Weibull ----
     v = np.linspace(0, df["wind5"].max(), 1000)
     f = (k/c)*(v/c)**(k-1)*np.exp(-(v/c)**k)
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6,4))
     ax.hist(df["wind5"], bins=30, density=True, alpha=0.6, color='skyblue')
     ax.plot(v, f, 'r', lw=2)
     ax.set_title("Distribution de Weibull")
@@ -149,12 +149,9 @@ if st.sidebar.button("Lancer l'analyse"):
         st.pyplot(fig)
 
     # ---- Windrose ----
-    fig2 = plt.figure()
-    ax2 = WindroseAxes.from_ax()
-    ax2.bar(df["direction"], df["wind5"],
-            normed=True,
-            opening=0.8,
-            edgecolor='white')
+    fig2 = plt.figure(figsize=(6,6))
+    ax2 = WindroseAxes.from_ax(fig=fig2)
+    ax2.bar(df["direction"], df["wind5"], normed=True, opening=0.8, edgecolor='white')
     ax2.set_legend()
     with tab2:
         st.pyplot(fig2)
@@ -189,7 +186,7 @@ if st.sidebar.button("Lancer l'analyse"):
     with tab3:
         st.dataframe(df_summary)
         # Graphique turbines
-        fig3, ax3 = plt.subplots()
+        fig3, ax3 = plt.subplots(figsize=(6,4))
         ax3.bar(df_summary["Turbine"], df_summary["P moy récup (W)"]/1000, color='green', alpha=0.7)
         ax3.set_ylabel("Puissance moyenne récupérable (kW)")
         ax3.set_title("Comparaison des turbines")
@@ -209,7 +206,7 @@ if st.sidebar.button("Lancer l'analyse"):
         )
 
     # ---- Graphique vitesse du vent ----
-    fig4, ax4 = plt.subplots(figsize=(10,4))
+    fig4, ax4 = plt.subplots(figsize=(8,3))
     ax4.plot(df.index, df["wind5"], label="50m", color='blue')
     ax4.plot(df.index, df["wind1"], label="10m", color='orange')
     ax4.set_xlabel("Date")
