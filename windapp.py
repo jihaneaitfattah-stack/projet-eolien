@@ -28,17 +28,18 @@ Bienvenue dans l'application d'analyse du potentiel éolien !
 # =======================
 st.sidebar.header("Paramètres du site")
 
-# Utiliser session_state pour le bouton exemple
+# Coordonnées Beni Mellal par défaut
 if 'lat' not in st.session_state:
-    st.session_state['lat'] = 23.69
+    st.session_state['lat'] = 32.3375
 if 'lon' not in st.session_state:
-    st.session_state['lon'] = -15.95
+    st.session_state['lon'] = -6.3498
 if 'start' not in st.session_state:
     st.session_state['start'] = "20230101"
 if 'end' not in st.session_state:
     st.session_state['end'] = "20230201"
 
-if st.sidebar.button("Exemple de site(beni mellal)"):
+# Bouton exemple
+if st.sidebar.button("Exemple de site (Beni Mellal)"):
     st.session_state['lat'] = 32.3375
     st.session_state['lon'] = -6.3498
     st.session_state['start'] = "20230101"
@@ -145,14 +146,22 @@ if st.sidebar.button("Lancer l'analyse"):
     ax.set_title("Distribution de Weibull")
     ax.set_xlabel("Vitesse (m/s)")
     ax.set_ylabel("Densité")
+    ax.tick_params(axis='x', labelsize=8)
+    ax.tick_params(axis='y', labelsize=8)
     with tab1:
         st.pyplot(fig)
 
-    # ---- Windrose ----
-    fig2 = plt.figure(figsize=(4,2))
+    # ---- Windrose compacte ----
+    fig2 = plt.figure(figsize=(4,4))
     ax2 = WindroseAxes.from_ax(fig=fig2)
-    ax2.bar(df["direction"], df["wind5"], normed=True, opening=0.8, edgecolor='white')
-    ax2.set_legend()
+    ax2.bar(
+        df["direction"], 
+        df["wind5"], 
+        normed=True, 
+        opening=0.6, 
+        edgecolor='white'
+    )
+    ax2.set_legend(prop={'size':8})
     with tab2:
         st.pyplot(fig2)
 
@@ -188,9 +197,12 @@ if st.sidebar.button("Lancer l'analyse"):
         # Graphique turbines
         fig3, ax3 = plt.subplots(figsize=(4,2))
         ax3.bar(df_summary["Turbine"], df_summary["P moy récup (W)"]/1000, color='green', alpha=0.7)
-        ax3.set_ylabel("Puissance moyenne récupérable (kW)")
-        ax3.set_title("Comparaison des turbines")
-        st.pyplot(fig3)
+        ax3.set_ylabel("Puissance moyenne récupérable (kW)", fontsize=8)
+        ax3.set_title("Comparaison des turbines", fontsize=10)
+        ax3.tick_params(axis='x', labelsize=8)
+        ax3.tick_params(axis='y', labelsize=8)
+        with tab3:
+            st.pyplot(fig3)
 
         # Meilleure turbine
         best_turbine = df_summary.loc[df_summary["TPI"].idxmax(), "Turbine"]
@@ -205,13 +217,15 @@ if st.sidebar.button("Lancer l'analyse"):
             mime='text/csv',
         )
 
-    # ---- Graphique vitesse du vent ----
-    fig4, ax4 = plt.subplots(figsize=(5,3))
+    # ---- Graphique vitesse du vent compacte ----
+    fig4, ax4 = plt.subplots(figsize=(5,2.5))
     ax4.plot(df.index, df["wind5"], label="50m", color='blue')
     ax4.plot(df.index, df["wind1"], label="10m", color='orange')
-    ax4.set_xlabel("Date")
-    ax4.set_ylabel("Vitesse du vent (m/s)")
-    ax4.set_title("Vitesse du vent au fil du temps")
-    ax4.legend()
+    ax4.set_xlabel("Date", fontsize=8)
+    ax4.set_ylabel("Vitesse du vent (m/s)", fontsize=8)
+    ax4.set_title("Vitesse du vent au fil du temps", fontsize=10)
+    ax4.tick_params(axis='x', labelsize=8)
+    ax4.tick_params(axis='y', labelsize=8)
+    ax4.legend(fontsize=8)
     with tab4:
         st.pyplot(fig4)
