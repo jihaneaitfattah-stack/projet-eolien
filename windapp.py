@@ -11,15 +11,43 @@ st.set_page_config(page_title="Analyse du potentiel éolien", layout="wide")
 st.title("🌬 Analyse du potentiel éolien")
 
 # =======================
+# Instructions pour les étudiants
+# =======================
+st.markdown("""
+Bienvenue dans l'application d'analyse du potentiel éolien !  
+**Instructions :**  
+1. Utilisez la **sidebar** pour saisir la latitude, la longitude et la période d'analyse.  
+2. Sélectionnez les turbines à comparer.  
+3. Cliquez sur **Lancer l'analyse** pour obtenir les résultats.  
+4. Les graphiques et tableaux sont disponibles dans les onglets.  
+5. Vous pouvez télécharger le tableau récapitulatif des turbines.
+""")
+
+# =======================
 # Sidebar pour les paramètres
 # =======================
 st.sidebar.header("Paramètres du site")
 
-lat = st.sidebar.number_input("Latitude", value=23.69)
-lon = st.sidebar.number_input("Longitude", value=-15.95)
+# Utiliser session_state pour le bouton exemple
+if 'lat' not in st.session_state:
+    st.session_state['lat'] = 23.69
+if 'lon' not in st.session_state:
+    st.session_state['lon'] = -15.95
+if 'start' not in st.session_state:
+    st.session_state['start'] = "20230101"
+if 'end' not in st.session_state:
+    st.session_state['end'] = "20230201"
 
-start = st.sidebar.text_input("Date début (YYYYMMDD)", "20230101")
-end = st.sidebar.text_input("Date fin (YYYYMMDD)", "20230201")
+if st.sidebar.button("Exemple de site"):
+    st.session_state['lat'] = 23.69
+    st.session_state['lon'] = -15.95
+    st.session_state['start'] = "20230101"
+    st.session_state['end'] = "20230201"
+
+lat = st.sidebar.number_input("Latitude", value=st.session_state['lat'])
+lon = st.sidebar.number_input("Longitude", value=st.session_state['lon'])
+start = st.sidebar.text_input("Date début (YYYYMMDD)", st.session_state['start'])
+end = st.sidebar.text_input("Date fin (YYYYMMDD)", st.session_state['end'])
 
 # Sélection des turbines
 turbines = {
