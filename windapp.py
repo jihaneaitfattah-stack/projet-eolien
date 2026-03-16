@@ -1,4 +1,13 @@
-import streamlit as st
+
+import subprocess
+import sys
+
+# Installation forcée des dépendances critiques
+try:
+    import scipy
+    import windrose
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "scipy", "windrose"])import streamlit as st
 import requests
 import pandas as pd
 import numpy as np
